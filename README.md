@@ -2,15 +2,15 @@
 ## 1. Supabase Configuration
 ### Create a new project on Supabase.
 ### Go to the SQL Editor and run the following script to create the table:
-
-#### SQL
-#### CREATE TABLE users (
-####     id SERIAL PRIMARY KEY,
-####     name TEXT NOT NULL,
-####     email TEXT UNIQUE NOT NULL,
-####     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW())
-#### );
-
+```
+SQL
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW())
+);
+```
 ### Go to Settings > General and copy your Project ID.
 ### Go to Settings > API and copy your Publishable Key.
 
