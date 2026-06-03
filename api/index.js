@@ -14,12 +14,12 @@ const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Health Check Route
-app.get('/', (req, res) => {
-  res.send('Node.js CRUD API with Supabase is running!');
+app.get('/api', (req, res) => {
+  res.send('API is running!');
 });
 
 // CREATE: Add a new user
-app.post('/users', async (req, res) => {
+app.post('/api/users', async (req, res) => {
   const { name, email } = req.body;
   const { data, error } = await supabase
     .from('users')
@@ -31,7 +31,7 @@ app.post('/users', async (req, res) => {
 });
 
 // READ: Get all users
-app.get('/users', async (req, res) => {
+app.get('/api/users', async (req, res) => {
   const { data, error } = await supabase.from('users').select('*');
   
   if (error) return res.status(400).json({ error: error.message });
@@ -39,7 +39,7 @@ app.get('/users', async (req, res) => {
 });
 
 // UPDATE: Update a user by ID
-app.put('/users/:id', async (req, res) => {
+app.put('/api/users/:id', async (req, res) => {
   const { id } = req.params;
   const { name, email } = req.body;
   const { data, error } = await supabase
@@ -53,7 +53,7 @@ app.put('/users/:id', async (req, res) => {
 });
 
 // DELETE: Remove a user by ID
-app.delete('/users/:id', async (req, res) => {
+app.delete('/api/users/:id', async (req, res) => {
   const { id } = req.params;
   const { data, error } = await supabase
     .from('users')

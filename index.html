@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My CRUD Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+        .card { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
+        input { padding: 8px; margin-right: 10px; }
+        button { padding: 8px 12px; cursor: pointer; }
+        li { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <h1>User Management</h1>
+
+    <div class="card">
+        <h3>Add New User</h3>
+        <input type="text" id="name" placeholder="Enter Name">
+        <input type="email" id="email" placeholder="Enter Email">
+        <button onclick="createUser()">Save User</button>
+    </div>
+
+    <div class="card">
+        <h3>User List</h3>
+        <button onclick="fetchUsers()">Load Users</button>
+        <ul id="userList"></ul>
+    </div>
+
+    <script>
+        // REPLACE THIS WITH YOUR VERCEL LINK
+        const API_URL = '/api/users';
+        // READ: Fetch users from your API
+        async function fetchUsers() {
+            const response = await fetch(API_URL);
+            const users = await response.json();
+            
+            const list = document.getElementById('userList');
+            list.innerHTML = ''; // Clear current list
+            
+            users.forEach(user => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <strong>${user.name}</strong> (${user.email}) 
+                    <button onclick="deleteUser(${user.id})" style="color:red; margin-left:10px;">Delete</button>
+                `;
+                list.appendChild(li);
+            });
+        }
+
+        // CREATE: Send data to your API
+        async function createUser() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+
+            await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email })
+            });
+
+            // Clear inputs and reload list
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            fetchUsers();
+        }
+
+        // DELETE: Remove data via API
+        async function deleteUser(id) {
+            await fetch(`${API_URL}/${id}`, {
+                method: 'DELETE'
+            });
+            fetchUsers();
+        }
+    </script>
+</body>
+</html>
