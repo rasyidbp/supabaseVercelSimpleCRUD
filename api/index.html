@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vanilla JS CRUD</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 400px; }
+    .user-item { display: flex; justify-content: space-between; margin-bottom: 8px; padding: 8px; background: #f4f4f4; border-radius: 4px; }
+    button { cursor: pointer; margin-left: 5px; }
+  </style>
+</head>
+<body>
+
+  <h2>Frontend User Manager</h2>
+
+  <div style="margin-bottom: 20px;">
+    <input type="text" id="nameInput" placeholder="Enter a name...">
+    <button onclick="createUser()">Add User</button>
+  </div>
+
+  <div id="userList"></div>
+
+  <script>
+    // Data Storage (In-memory array)
+    let users = [];
+    let currentId = 1;
+
+    // READ: Render the array to the screen
+    function renderUsers() {
+      const list = document.getElementById('userList');
+      list.innerHTML = ''; // Clear the current list
+
+      users.forEach(user => {
+        const div = document.createElement('div');
+        div.className = 'user-item';
+        div.innerHTML = `
+          <span>${user.name}</span>
+          <div>
+            <button onclick="updateUser(${user.id})">Edit</button>
+            <button onclick="deleteUser(${user.id})">Delete</button>
+          </div>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    // CREATE: Add a new object to the array
+    function createUser() {
+      const nameInput = document.getElementById('nameInput');
+      const name = nameInput.value.trim();
+
+      if (name) {
+        users.push({ id: currentId++, name: name });
+        nameInput.value = ''; // Reset input field
+        renderUsers(); // Update the UI
+      } else {
+        alert('Please enter a valid name.');
+      }
+    }
+
+    // UPDATE: Find the user and change their name
+    function updateUser(id) {
+      const user = users.find(u => u.id === id);
+      if (!user) return;
+
+      const newName = prompt('Update name:', user.name);
+      if (newName !== null && newName.trim() !== '') {
+        user.name = newName.trim();
+        renderUsers(); // Update the UI
+      }
+    }
+
+    // DELETE: Filter the user out of the array
+    function deleteUser(id) {
+      users = users.filter(user => user.id !== id);
+      renderUsers(); // Update the UI
+    }
+
+    // Initial render when the page loads
+    renderUsers();
+  </script>
+
+</body>
+</html>
